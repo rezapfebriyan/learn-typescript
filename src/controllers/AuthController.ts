@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import User from "../models/User"
 import bcrypt from "bcrypt"
+import { comparePassword, generateJwt } from "../utils"
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
     const { name, email, password, role } = req.body
@@ -27,4 +28,39 @@ export const register = async (req: Request, res: Response): Promise<Response> =
                 message: error.message
             });
     }
+}
+
+export const login = async (req: Request, res: Response): Promise<Response> => {
+
+    const user = await User.findOne({
+        where: { email: req.body.email }
+    })
+
+    if (!user) return res.status(404).json({
+        code : 404,
+        message: "User not found"
+    })
+
+    const match = await comparePassword(req.body.password, user.password)
+
+    if (!match) return res.status(404).json({
+        code : 404,
+        message: "Your credentials doestn't match with our record" 
+    })
+
+    const name = user.name
+    const role = user.role
+    const accessToken = generateJwt ({
+        id: user.id,
+        name: user.name
+    })
+
+    return res.status(200).json({
+        code : 200,
+        message : "Login successful",
+        data : { 
+            user: { name, role },
+            accessToken
+        }
+    })
 }

@@ -13,3 +13,14 @@ export const validateRegist = [
         next()
     }
 ]
+
+export const validateLogin = [
+    check('email', 'invalid email').isEmail(),
+    check('password', 'The minimum password length is 8 characters').isLength({ min: 8 }),
+    (req: Request, res: Response, next: NextFunction): any => {
+        const err = validationResult(req)
+        if (!err.isEmpty()) return res.status(400).json({ message: err.array() })
+
+        next()
+    }
+]
