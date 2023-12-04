@@ -1,10 +1,11 @@
 import { register } from "../controllers/AuthController"
+import { validateRegist } from "../middlewares/AuthValidator"
 import BaseRoutes from "./BaseRoute"
 
 class AuthRoutes extends BaseRoutes  {
 
     public routes(): void {
-        this.router.post("/register", register)
+        this.router.post("/register", validateRegist, register)
     }
 }
 

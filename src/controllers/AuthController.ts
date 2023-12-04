@@ -1,17 +1,16 @@
 import { Request, Response } from "express"
-import Users from "../models/User"
+import User from "../models/User"
 import bcrypt from "bcrypt"
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
     const { name, email, password, role } = req.body
-
-    const hash_password: string = await bcrypt.hash(password,10)
+    const hash: string = await bcrypt.hash(password, 10)
     
     try {
-        await Users.create({
+        await User.create({
             name,
             email,
-            password: hash_password,
+            password: hash,
             role
         });
         

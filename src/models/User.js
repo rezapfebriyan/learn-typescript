@@ -1,5 +1,7 @@
-import { DataTypes } from "sequelize"
-import db from "../config/database"
+const Sequelize = require("sequelize")
+const db = require("../config/database")
+
+const { DataTypes } = Sequelize
 
 const Users = db.define('users', {
     id: {
@@ -44,8 +46,8 @@ const Users = db.define('users', {
 
 // db.sync().then(() => {
 //     console.log('User table created successfully!')
-// }).catch((error: Error) => {
+// }).catch((error) => {
 //     console.error('Unable to create table : ', error)
 // });
 
-export default Users
+module.exports = Users
