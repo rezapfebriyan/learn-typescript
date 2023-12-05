@@ -52,7 +52,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
     const role = user.role
     const accessToken = generateJwt ({
         id: user.id,
-        name: user.name
+        email: user.email
     })
 
     return res.status(200).json({
@@ -63,4 +63,8 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
             accessToken
         }
     })
+}
+
+export const userAuth = async (req: Request, res: Response) => {
+    return res.json({ result: req.app.locals.user })
 }

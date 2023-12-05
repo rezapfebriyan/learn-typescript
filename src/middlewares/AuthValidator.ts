@@ -10,7 +10,7 @@ export const validateRegist = [
         const err = validationResult(req)
         if (!err.isEmpty()) return res.status(400).json({ message: err.array() })
 
-        next()
+        return next()
     }
 ]
 
@@ -21,6 +21,6 @@ export const validateLogin = [
         const err = validationResult(req)
         if (!err.isEmpty()) return res.status(400).json({ message: err.array() })
 
-        next()
+        return next()
     }
 ]

@@ -12,4 +12,6 @@ export const comparePassword = async (password: string, hashPassword: string): P
 
 export const generateJwt = (payload: object): string => jwt.sign(payload, secret, {
     expiresIn: '1h'
-  })
+})
+
+export const verifyJwt = (token: string) => jwt.verify(token, secret)
