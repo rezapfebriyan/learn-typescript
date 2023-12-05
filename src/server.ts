@@ -2,6 +2,7 @@ import express, { Application } from "express"
 import compression from "compression"
 import { config as dotenv } from "dotenv"
 import AuthRoutes from "./routes/AuthRoutes"
+import ProductRoutes from "./routes/ProductRoutes"
 
 class App {
     public app: Application
@@ -20,6 +21,7 @@ class App {
 
     protected routes(): void {
         this.app.use("/api/v1/auth", AuthRoutes)
+        this.app.use("/api/v1/products", ProductRoutes)
     }
 }
 
