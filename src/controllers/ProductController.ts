@@ -86,8 +86,36 @@ class ProductController implements IController {
         }
 
     }
-    delete(req: Request, res: Response): Response {
-        return res.status(200).json({result: req.body.data})
+    delete = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const product = await Product.findOne({
+                where: { id: req.params.id }
+            })
+    
+            if (!product) return res.status(404).json({
+                code : 404,
+                message: "Product not found" 
+            })
+    
+            const { id: userId }  = req.app.locals.user
+    
+            await Product.destroy(
+                {
+                    where: { id:  product.id, userId }
+                }
+            )
+    
+            return res.status(200).json({ 
+                code : 200,
+                message: "Product has been deleted"
+            })
+        } catch (error: any) {
+            return res.status(500)
+                .json({
+                    code: 500,
+                    message: error.message
+                });
+        }
     }
 }
 

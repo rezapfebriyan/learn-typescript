@@ -9,6 +9,7 @@ class ProductRoutes extends BaseRoutes  {
         this.router.post("/", auth, validate, ProductController.store)
         this.router.get("/", auth, ProductController.getAll)
         this.router.put("/:id", auth, validate, ProductController.update)
+        this.router.delete("/:id", auth, ProductController.delete)
     }
 }
 
