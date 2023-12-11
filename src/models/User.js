@@ -3,7 +3,7 @@ const db = require("../config/database")
 
 const { DataTypes } = Sequelize
 
-const Users = db.define('users', {
+const User = db.define('users', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -50,4 +50,4 @@ const Users = db.define('users', {
 //     console.error('Unable to create table : ', error)
 // });
 
-module.exports = Users
+module.exports = User

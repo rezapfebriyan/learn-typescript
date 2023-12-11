@@ -1,26 +1,15 @@
 import { Request, Response } from "express"
-import User from "../models/User"
-
 import IController from "./IController"
-import Product from "../models/Product"
+import ProductService from "../services/productService"
 
 class ProductController implements IController {
     getAll = async (req: Request, res: Response): Promise<Response> => {
-        const { id }  = req.app.locals.user
         try {
-            const data = await Product.findAll({
-                attributes:[ 'id', 'name', 'price' ],
-                where: {
-                    userId: id // req from data middleware
-                },
-                include:[{ 
-                    model: User,
-                    attributes:['email', 'name']
-                }] // ada relasi Product ke User
-            })
+            const service: ProductService = new ProductService(req)
+            const data = await service.getAll()
+            
             return res.status(200)
             .json({ code : 200, data })
-
     
         } catch (error: any) {
             return res.status(500)
@@ -29,14 +18,9 @@ class ProductController implements IController {
         }
     }
     store = async (req: Request, res: Response): Promise<Response> => {
-        const { id }  = req.app.locals.user
-        const { name, price } = req.body
         try {
-            await Product.create({
-                name,
-                price,
-                userId: id
-            });
+            const service: ProductService = new ProductService(req)
+            await service.store()
             
             return res.status(201)
                 .json({
@@ -54,24 +38,8 @@ class ProductController implements IController {
     }
     update = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const product = await Product.findOne({
-                where: { id: req.params.id }
-            })
-    
-            if (!product) return res.status(404).json({
-                code : 404,
-                message: "Product not found" 
-            })
-    
-            const { id: userId }  = req.app.locals.user
-            const { name, price } = req.body
-    
-            const data = await Product.update(
-                { name, price },
-                {
-                    where: { id:  product.id, userId }
-                }
-            )
+            const service: ProductService = new ProductService(req)
+            const data = await service.update()
     
             return res.status(200).json({ 
                 code : 200,
@@ -84,26 +52,11 @@ class ProductController implements IController {
                     message: error.message
                 });
         }
-
     }
     delete = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const product = await Product.findOne({
-                where: { id: req.params.id }
-            })
-    
-            if (!product) return res.status(404).json({
-                code : 404,
-                message: "Product not found" 
-            })
-    
-            const { id: userId }  = req.app.locals.user
-    
-            await Product.destroy(
-                {
-                    where: { id:  product.id, userId }
-                }
-            )
+            const service: ProductService = new ProductService(req)
+            await service.delete()
     
             return res.status(200).json({ 
                 code : 200,
